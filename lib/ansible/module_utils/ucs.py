@@ -22,7 +22,8 @@ def get_handle(module):
         if handle.ip == ucsm or handle.name == ucsm:
             return handle
 
-    handle = UcsHandle(ucsm, ucs_user, ucs_password, secure, port)
+    handle = UcsHandle(ucsm, ucs_user, ucs_password, secure=bool(secure),
+                       port=port)
 
     try:
         handle.login()
@@ -38,35 +39,31 @@ def get_ucs_argument_spec(**kwargs):
     ucsm_ip = os.environ.get("UCSM_IP", "localhost")
     ucsm_user = os.environ.get("UCSM_USER", "admin")
     ucsm_password = os.environ.get("UCSM_PASSWORD", "password")
-    ucsm_password = os.environ.get("UCSM_PASSWORD", "password")
-    ucsm_port = os.environ.get("UCSM_PORT", "443")
-    ucsm_secure = os.environ.get("UCSM_SECURE", "True")
+    ucsm_port = os.environ.get("UCSM_PORT", 443)
+    ucsm_secure = os.environ.get("UCSM_SECURE", "false")
 
 
     spec = dict(
         hostname=dict(
-            required=True,
             type="str",
             default=ucsm_ip
         ),
         username=dict(
-            required=True,
             type="str",
             default=ucsm_user
         ),
         password=dict(
-            required=True,
             type="str",
             default=ucsm_password
         ),
         port=dict(
             required=False,
-            type="str",
+            type="int",
             default=ucsm_port
         ),
         secure=dict(
             required=False,
-            type="str",
+            type="bool",
             default=ucsm_secure
         ),
     )
